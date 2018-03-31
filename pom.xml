@@ -4,12 +4,18 @@
 
     <groupId>com.zouyyu</groupId>
     <artifactId>sidekiq-java-worker</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>java-worker</name>
     <url>http://maven.apache.org</url>
-
+    <distributionManagement>
+        <snapshotRepository>
+            <id>longen_snapshot</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.200.52:8081/repository/longen_snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

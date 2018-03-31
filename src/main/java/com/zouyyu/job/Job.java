@@ -61,11 +61,6 @@ public class Job {
         this.args = args;
     }
 
-    public Object getArguments(){
-        System.out.println(args.get(0).getArguments().get(0));
-        //java.util.LinkedHashMap
-        return args.get(0).getArguments().get(0).getClass().getName();
-    }
     @Override
     public String toString() {
         return "Job{" +

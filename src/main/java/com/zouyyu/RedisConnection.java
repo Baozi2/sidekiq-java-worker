@@ -1,6 +1,7 @@
 package com.zouyyu;
 
-import com.zouyyu.utils.RedisConfigFactory;
+import com.zouyyu.config.Config;
+import com.zouyyu.utils.ConfigFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -11,12 +12,12 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class RedisConnection {
 
-    private JedisPool pool;
+    private static JedisPool pool;
+    private static  final Config CONFIG = ConfigFactory.getConfig();
 
-    public JedisPool pool(){
+    public synchronized static JedisPool getPool(){
         if(pool == null){
-            System.out.println(RedisConfigFactory.getRedisURI());
-          pool =  new JedisPool(new JedisPoolConfig(), RedisConfigFactory.getRedisURI());
+          pool =  new JedisPool(new JedisPoolConfig(), CONFIG.getRedis().getRedisURI());
         }
         return  pool;
     }

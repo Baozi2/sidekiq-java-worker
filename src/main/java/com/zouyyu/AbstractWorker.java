@@ -1,7 +1,9 @@
 package com.zouyyu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zouyyu.config.Config;
 import com.zouyyu.job.Job;
+import com.zouyyu.utils.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -21,15 +23,19 @@ public abstract class AbstractWorker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWorker.class);
 
-    private static  JedisPool JEDIS_POOL ;//= new RedisConnection().pool();
+    private static final Config WORKER_CONFIG = ConfigFactory.getConfig();
+    private static final JedisPool JEDIS_POOL  = RedisConnection.getPool();
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public abstract void perform();
 
-    static {
-       JEDIS_POOL = new RedisConnection().pool();
+    private String queueName;
+
+    public AbstractWorker(){
+
     }
+
     public Job fetchOne() {
         List<String> jobJSON = fetchOriginJob();
         if(jobJSON.size() == 2){
@@ -46,8 +52,8 @@ public abstract class AbstractWorker {
     public List<String> fetchOriginJob() {
         try (Jedis jedis = JEDIS_POOL.getResource()) {
             String BASE_QUEUE_NAME = "queue:";
-            String queueName = BASE_QUEUE_NAME + "example";
-            return jedis.brpop(2, queueName);
+            String fullQueueName = BASE_QUEUE_NAME + WORKER_CONFIG.getQueueName();
+            return jedis.brpop(2, fullQueueName);
         }
     }
 
